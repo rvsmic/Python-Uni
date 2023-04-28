@@ -2,10 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-n = 150
+n = 100
+# "dlugosc" zycia cienia - 1 da standardowa gre w zycie
+shadowTime = 200
 Z = np.random.rand(n,n)
-Z[Z>=0.5] = 1
-Z[Z<0.5] = 0
+Z[Z >= 0.5] = shadowTime
+Z[Z < 0.5] = 0
 
 # rozne kolory dla generacji = punkt
 
@@ -14,19 +16,20 @@ def anima(data):
     newGrid = Z.copy()
     for i in range(n):
         for j in range(n):
-            # neighboursCount = (Z[i, (j-1)%n] + Z[i, (j+1)%n] + Z[(i-1)%n, j] + Z[(i+1)%n, j] + Z[(i-1)%n, (j-1)%n] + Z[(i-1)%n, (j+1)%n] + Z[(i+1)%n, (j-1)%n] + Z[(i+1)%n, (j+1)%n])
-            neighboursCount = Z[i-1:i+2,j-1:j+2].sum() - Z[i,j]
-            if Z[i,j] == 1:
-                if(neighboursCount < 2) or (neighboursCount > 3):
-                    newGrid[i,j] = 0
+            neighboursCount = (Z[i-1:i+2,j-1:j+2] == shadowTime).sum() - (Z[i,j] == shadowTime)
+            if Z[i,j] == shadowTime:
+                if neighboursCount < 2 or neighboursCount > 3:
+                    newGrid[i,j] -= 1
             else:
                 if neighboursCount == 3:
-                    newGrid[i,j] = 1
+                    newGrid[i,j] = shadowTime
+                else:
+                    newGrid[i,j] -= 1
     mat.set_data(newGrid)
     Z = newGrid
-    return [mat]
+    return mat
 
 fig,ax = plt.subplots()
-mat = ax.matshow(Z,cmap="cividis")
-ani = FuncAnimation(fig,anima,frames=2000,interval=10)
+mat = ax.matshow(Z,cmap="inferno")
+ani = FuncAnimation(fig,anima,frames=500,interval=10)
 plt.show()
