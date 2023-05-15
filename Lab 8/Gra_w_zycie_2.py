@@ -4,7 +4,7 @@ from matplotlib.animation import FuncAnimation
 
 n = 100
 # "dlugosc" zycia cienia - 1 da standardowa gre w zycie
-shadowTime = 200
+shadowTime = 5
 Z = np.random.rand(n,n)
 Z[Z >= 0.5] = shadowTime
 Z[Z < 0.5] = 0
