@@ -52,11 +52,11 @@ class Game(object):
     state = 2
     while(state == 2):
       print("\n"+"".join("-" for _ in range(10)))
+      self.board.get_state()
       print(f"Player: {current_player.name}")
       move = current_player.get_move()
       self.board.set_field(move)
       current_player = player_two if current_player is not player_two else player_one
-      self.board.get_state()
       state = self.game_over()
 
     return state
